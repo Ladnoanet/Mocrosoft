@@ -205,7 +205,7 @@
             border-radius: 50%;
             opacity: 0;
             transition: opacity 0.3s;
-            & img { width: 55%; filter: invert(1); margin: 1px 0 0 1px; }
+            & img { width: 55%; filter: invert(1); /*margin: 1px 0 0 1px;*/ }
         }
     }
 
@@ -213,7 +213,7 @@
 </head>
 <body>
     <header>
-        <button onclick="switchScreen('main'); document.getElementById('backbutton').style.opacity = '0';" id="backbutton"><img src="arrow.png" alt="->"></button>
+        <button onclick="if (appisstarted) { switchScreen('main'); appisstarted = false; document.getElementById('backbutton').style.opacity = '0'; }" id="backbutton"><img src="arrow.png" alt="->"></button>
         <p id="time">00:00</p>
     </header>
     <div id="screens" class="screens">
@@ -371,6 +371,7 @@
             currentscr.addEventListener("animationend", () => {
                 currentScreen = next;
                 isSwitching = false;
+                if (next == "app") appisstarted = true;
             }, { once: true });
 
         };
@@ -379,10 +380,14 @@
 
             if (!mainisloaded) return;
             if (isSwitching) return;
+            if (appisstarted) return;
 
             document.getElementById("backbutton").style.opacity = "1";
             switchScreen("app");
-        }
+        };
+        document.addEventListener("click", () => {
+            document.documentElement.requestFullscreen();
+        }, { once: true });
     </script>
 </body>
 </html>
