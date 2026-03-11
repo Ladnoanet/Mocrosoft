@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Шиндовс Кирпич Семен</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    * {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;    
+        outline: none;
+        }
+        *::-webkit-scrollbar {
+            display: none;
+        }
+
+    body {
+        background: rgb(0, 0, 0);
+        width: 100%;
+        height: 100vh;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        overflow-y: hidden;
+    }
+
+    .threed {
+        transform-style: preserve-3d;
+        transform-origin: left center;
+        animation: modern_anim_open 1s forwards;
+    }
+
+    @keyframes modern_anim_open {
+        0% { transform: rotateY(-70deg); opacity: 0; }
+        100% { transform: rotateY(0deg); opacity: 1; }
+    }
+
+    @keyframes modern_anim_close {
+        0% { transform: rotateY(0deg); opacity: 1; }
+        100% { transform: rotateY(-70deg); opacity: 0; }
+    }
+
+    .apps {
+        flex: 1;
+
+        height: 100%;
+        width: 70%;
+        gap: 10px;
+        display: flex;
+        align-items: flex-start;
+        align-content: flex-start;
+        flex-wrap: wrap;
+        /*overflow-y: auto;*/
+        perspective: 300px;
+
+        & .app {
+            background: #19A4E9;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            padding: 5px;
+            color: white;
+            aspect-ratio: 1 / 1;
+            opacity: 0;
+            
+            & img { height: 55%; }
+            & .appname { font-size: 13px; color: white; width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+            & p { word-wrap: break-word; font-size: 16px; }
+
+            &.square { width: calc(50% - 5px); justify-content: space-between; align-items: center; }
+            &.long { width: 100%; align-items: flex-end; aspect-ratio: 2 / 1; justify-content: space-between; text-align: left;
+            & .flexapp { display: flex; width: 100%; justify-content: space-between; align-items: flex-end; & h1 { font-weight: 50; } } }
+        }
+    }
+    
+    .buttonarrow {
+        width: 12.5%;
+        aspect-ratio: 1 / 1;
+        display: flex; align-items: center; justify-content: center;
+        background: 0; border: 2px solid white;
+        border-radius: 50%;
+        & img { height: 45%; filter: invert(1); }
+    }
+
+    main {
+        width: 100%;
+        flex: 1;
+        height: 100%;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        box-sizing: border-box;
+        gap: 15px;
+        perspective: 300px;
+        z-index: 100;
+        padding: 15px;
+    }
+    .otherscreen {
+        width: 100%;
+        height: 100%;
+        background: #000000;
+        z-index: 99;
+        opacity: 0;
+        box-sizing: border-box;
+        padding: 15px;
+    }
+
+    .screens {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        perspective: 300px;
+        justify-content: flex-start;
+        * { color: white; }
+    }
+
+    #time { color: white; text-align: right; }
+
+    .mainscreen {
+        position: fixed;
+        bottom: 0;
+        transform-style: preserve-3d;
+        transform-origin: left center;
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .mains { 
+        flex: 1;
+        height: 100%;
+        width: 70%;
+        gap: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        overflow-y: auto;
+        perspective: 300px;
+        box-sizing: border-box;
+    }
+
+    .allapps {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            justify-content: flex-start;
+            align-items: flex-start;
+
+            & .app {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                width: 100%;
+                font-size: 20px;
+
+                & .icon {
+                    width: 15%;
+                    aspect-ratio: 1 / 1;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    background: #19A4E9;
+
+                    & img {
+                        width: 50%;
+                    }
+                }
+
+                & span {
+                    flex: 1;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                }
+            }
+        }
+
+    header {
+        height: 40px;
+        display: flex;
+        justify-content: space-between;
+        box-sizing: border-box;
+        padding: 0px 10px 0px 5px;
+        align-items: center;
+
+        & button {
+            height: calc(100% - 10px);
+            aspect-ratio: 1 / 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: 0;
+            border: 2px solid white;
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s;
+            & img { width: 55%; filter: invert(1); margin: 1px 0 0 1px; }
+        }
+    }
+
+</style>
+</head>
+<body>
+    <header>
+        <button onclick="switchScreen('main'); document.getElementById('backbutton').style.opacity = '0';" id="backbutton"><img src="arrow.png" alt="->"></button>
+        <p id="time">00:00</p>
+    </header>
+    <div id="screens" class="screens">
+        <main id="main" class="mainscreen">
+            <div id="apps" class="apps">
+
+                <div onclick="App('ЬЫТ')" id="1" class="app square threed">
+                    <span></span>
+                    <img src="ьыт.png" alt="app">
+                    <p class="appname">ЬЫТ Нетворк</p>
+                </div>
+                <div onclick="App('Стор')" id="2" class="app square threed">
+                    <span></span>
+                    <img src="магаз.png" alt="app">
+                    <p class="appname">No name стор</p>
+                </div>
+                <div onclick="App('Новости')" id="3" class="app long threed">
+                    <p style="width: 100%;">Шиндовс Кирпич имеет при себе новый Магазин приложений!</p>
+                    <div class="flexapp">
+                        <p class="appname">Казахстан 6</p>
+                        <h1>НОВЫЕ</h1>
+                    </div>
+                </div>
+                <div onclick="App('ППВП')" id="4" class="app square threed">
+                    <span></span>
+                    <img src="ппвп.png" alt="app">
+                    <p class="appname">ППВП</p>
+                </div>
+                <div onclick="App('Настройки')" id="5" class="app square threed">
+                    <span></span>
+                    <img src="сеттингс.png" alt="app">
+                    <p class="appname">Вайлас</p>
+                </div>
+                <div onclick="App('Писанина')" id="6" class="app square threed">
+                    <span></span>
+                    <img src="писанина.png" alt="app">
+                    <p class="appname">Писанина</p>
+                </div>
+                <div onclick="App('Погода')" id="7" class="app square threed">
+                    <span></span>
+                    <img src="солнце.png" alt="app">
+                    <p class="appname">Солнышко</p>
+                </div>
+                <div onclick="App('Слушалки')" id="8" class="app square threed">
+                    <span></span>
+                    <img src="музыка.png" alt="app">
+                    <p class="appname">Слушалки</p>
+                </div>
+                <div onclick="App('Камера')" id="9" class="app square threed">
+                    <span></span>
+                    <img style="width: 55%; height: auto;" src="камера.png" alt="app">
+                    <p class="appname">Слежка</p>
+                </div>
+
+            </div>
+            <button onclick="switchScreen('appsall')" class="buttonarrow"><img  style="transform: rotate(180deg);" src="arrow.png" alt="->"></button>
+        </main>
+        <div id="appsall" class="otherscreen mainscreen">
+             <button onclick="switchScreen('main')" class="buttonarrow"><img src="arrow.png" alt="->"></button>
+             <div class="mains allapps">
+
+                <div onclick="App('ЬЫТ')" class="app">
+                    <div class="icon"><img src="ьыт.png" alt="ьыт"></div><span>ЬЫТ Нетворк</span>
+                </div>
+                <div onclick="App('Стор')" class="app">
+                    <div class="icon"><img src="магаз.png" alt="ьыт"></div><span>No name стор</span>
+                </div>
+                <div onclick="App('ППВП')" class="app">
+                    <div class="icon"><img src="ппвп.png" alt="ьыт"></div><span>ППВП Исследователь</span>
+                </div>
+                <div onclick="App('Настройки')" class="app">
+                    <div class="icon"><img src="сеттингс.png" alt="ьыт"></div><span>Вайлас</span>
+                </div>
+                <div onclick="App('Писанина')" class="app">
+                    <div class="icon"><img src="писанина.png" alt="ьыт"></div><span>Писанина</span>
+                </div>
+                <div onclick="App('Погода')" class="app">
+                    <div class="icon"><img src="солнце.png" alt="ьыт"></div><span>Солнышко</span>
+                </div>
+                <div onclick="App('Слушалки')" class="app">
+                    <div class="icon"><img src="музыка.png" alt="ьыт"></div><span>Слушалки</span>
+                </div>
+                <div onclick="App('Камера')" class="app">
+                    <div class="icon"><img src="камера.png" alt="ьыт"></div><span>Слежка</span>
+                </div>
+
+             </div>
+        </div>
+        <div style="z-index: 98;" id="app" class="otherscreen mainscreen">
+            <p>:3</p>
+        </div>
+    </div>
+    <script>
+        function updateTime() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const timeString = `${hours}:${minutes}`;
+
+            document.getElementById("time").textContent = timeString;
+        }
+
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        let mainisloaded = false;
+        let currentScreen = "main";
+        let isSwitching = false;
+        let appisstarted = false;
+
+        function OpenMain() {
+            mainisloaded = false;
+
+            const apps = document.getElementById("apps");
+            const screens = document.getElementById("screens");
+
+            apps.style.overflowY = "visible";
+            screens.style.overflow = "visible";
+
+            let lastApp;
+
+            for (let index = 1; index < 10; index++) {
+                const app = document.getElementById(String(index));
+                lastApp = app;
+
+                app.style.animation = `modern_anim_open 1s forwards`;
+                app.style.animationDelay = `${index * 0.1}s`;
+            }
+
+            lastApp.addEventListener("animationend", () => {
+                apps.style.overflowY = "auto";
+                screens.style.overflow = "hidden";
+                mainisloaded = true;
+            }, { once: true });
+        }
+
+        OpenMain();
+
+        function switchScreen(next) {
+
+            if (!mainisloaded) return;
+            if (isSwitching) return;
+            if (next === currentScreen) return;
+
+            isSwitching = true;
+
+            const currentscr = document.getElementById(currentScreen);
+            const nextscr = document.getElementById(next);
+
+            nextscr.style.opacity = "1";
+
+            currentscr.style.animation = "modern_anim_close 0.7s forwards";
+            nextscr.style.animation = "modern_anim_open 0.7s forwards";
+
+            currentscr.addEventListener("animationend", () => {
+                currentScreen = next;
+                isSwitching = false;
+            }, { once: true });
+
+        };
+
+        function App(nameofapp) {
+
+            if (!mainisloaded) return;
+            if (isSwitching) return;
+
+            document.getElementById("backbutton").style.opacity = "1";
+            switchScreen("app");
+        }
+    </script>
+</body>
+</html>
