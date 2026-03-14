@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        *  {
+        color: white;
+        padding: 0; margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    * {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;    
+        outline: none;
+        }
+        *::-webkit-scrollbar {
+            display: none;
+        }
+
+    .threed {
+        transform-style: preserve-3d;
+        transform-origin: left center;
+        animation: modern_anim_open 1s forwards;
+    }
+
+    @keyframes modern_anim_open {
+        0% { transform: rotateY(-70deg); opacity: 0; }
+        100% { transform: rotateY(0deg); opacity: 1; }
+    }
+
+    @keyframes modern_anim_close {
+        0% { transform: rotateY(0deg); opacity: 1; }
+        100% { transform: rotateY(-70deg); opacity: 0; }
+    }
+    
+    h1 {
+        font-weight: 400;
+        font-size: 35px;
+    }
+    h2 {
+        font-weight: 400;
+        font-size: 30px;
+    }
+    button {
+        text-align: left;
+        background: 0; border: 0;
+        font-size: 15px;
+        color: #807F84;
+        &.def { color: white; }
+        &.border { box-sizing: border-box; padding: 5px 15px; border: 1.5px solid white; }
+    }
+    hr {
+        width: 100%;
+        border: 1px solid #807F84;
+    }
+
+    body {
+        background: black;
+        width: 100%;
+        height: calc(100vh - 40px);
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .header {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        align-items: center;
+        display: flex;
+        overflow-x: scroll;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-x;
+        flex-wrap: nowrap;
+        box-sizing: border-box;
+        gap: 15px;
+        height: 10vh;
+
+        & button {
+            height: 100%;
+            font-size: 7vh;
+            font-weight: 400;
+            background: 0;
+            border: 0;
+            color: #807F84;
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            flex-shrink: 0;
+
+            &.active { color: white; }
+        }
+    }
+
+    .mainsrc {
+        background: white;
+        width: 100%;
+        box-sizing: border-box;
+        flex: 1;
+        display: none;
+        gap: 10px;
+        overflow-y: auto;
+
+        &.active {
+            display: flex;
+            flex-direction: column;
+            /*align-items: flex-start;*/
+        }
+    }
+
+    .notification {
+        position: fixed;
+        top: -200px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        background: #1F1F1F;
+        box-sizing: border-box;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+        transition: all 0.5s;
+
+        & p { font-size: 20px; }
+        & button { 
+            margin-top: 5px;
+            box-sizing: border-box;
+            padding: 5px 15px;
+            border: 1.5px solid white;    
+        }
+    }
+
+    .footer {
+        background: black;
+        width: 100%;
+        display: flex;
+        height: 50px;
+        box-sizing: border-box;
+        padding: 10px;
+        gap: 10px;
+
+        & button {
+            height: 100%;
+            aspect-ratio: 1 / 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1.5px solid white;
+            border-radius: 50%;
+
+            & img { height: 50%; filter: invert(1); }
+        }
+
+        & input {
+            flex: 1;
+            height: 100%;
+            background: white;
+            box-sizing: border-box;
+            border: 0;
+            border-radius: 0;
+            color: black;
+            padding: 0px 5px 0px 5px;
+        }
+    }
+
+    .sites {
+        width: 100%;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        & .site {
+            padding-bottom: 10px;
+            border-bottom: 1px solid #807F84;
+            span { color: rgb(0, 89, 255); }
+            * { color: black; }
+        }
+    }
+
+    .yadnesk {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 30px;
+
+        & .logoya {
+            width: 70%;
+        }
+
+        & .searchh {
+            width: 90%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+
+            & input {
+                flex: 1;
+                height: 40px;
+                border-radius: 10px;
+                background: #242424;
+                border: 2px solid #ffd500;
+                box-sizing: border-box;
+                padding: 0px 10px 0px 10px;
+                color: white;
+            }
+            & button {
+                height: 40px;
+                border-radius: 10px;
+                background: #ffd500;
+                padding: 0px 15px 0px 15px;
+                color: #242424;
+            }
+        }
+        & .ad { width: 90%; }
+        & .alice {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            & img { height: 50px; width: 50px; }
+        }
+    }
+
+    .playmarket {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        * { color: #1F1F1F; }
+        & .load { background: #1F1F1F; width: 30%; height: 5px; border-radius: 10px; }
+    }
+
+    .vgvideo {
+        background: #EDEEF0;
+        padding-top: 70px;
+        padding-bottom: 30px;
+        box-sizing: border-box;
+        align-items: center;
+        & .headervg {
+            position: fixed;
+            top: 0px;
+            width: 100%;
+            height: 50px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            & img {
+                height: 50%;
+            }
+        }
+        & .videos {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            box-sizing: border-box;
+            padding: 20px;
+            width: 100%;
+            & .video {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                p { color: black; font-weight: 600; font-size: 25px; }
+                & img { width: 100%; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #D7D6D4; }
+            }
+        }
+        & .aboutvideo {
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            & p { color: black; font-size: 20px; font-weight: 600; }
+        }
+    }
+    </style>
+</head>
+<body>
+
+    <div style="padding: 10px; box-sizing: border-box;" id="1" class="mainsrc active">
+        <div style="display: flex; align-items: center; gap: 10px;" class="logo">
+            <img style="height: 30px;" src="ebobo browser.png" alt="">
+            <p style="color: black;">ППВП Исследователь</p>
+        </div>
+        <div class="sites">
+
+            <div onclick="changesreen(3)" class="site">
+                <span>Яднекс.рф</span>
+                <p>браузер для настоящих патриотов. с 1 марта!</p>
+            </div>
+
+            <div onclick="changesreen(4); notification('market', 3)" class="site">
+                <span>Плэй Маркет.сом</span>
+                <p>Приложения на все случаю жизни!</p>
+            </div>
+
+            <div onclick="changesreen(4); notification('market', 3)" class="site">
+                <span>Апп стор.сом</span>
+                <p>Pear app store matahafaka english</p>
+            </div>
+
+            <div onclick="changesreen(5)" class="site">
+                <span>ВГ Видео.рф</span>
+                <p>Качественный контент прям здесь!</p>
+            </div>
+
+            <div onclick="yadnex('ladnoanet.github.io/Mocrosoft/')" class="site">
+                <span>Мокрософт.ио</span>
+                <p>хуйня ебанная</p>
+            </div>
+
+        </div>
+    </div>
+    <div id="2" class="mainsrc">
+        <iframe id="frame" style="width: 100%; height: 100%;" src="" frameborder="0"></iframe>
+    </div>
+    <div style="background: #242424" id="3" class="mainsrc yadnesk">
+        <img class="logoya" src="яднекс.png" alt="яднекс">
+        <div class="searchh">
+            <input id="yadnesksearch" type="text">
+            <button onclick="yadnex(document.getElementById('yadnesksearch').value)">Ищещь</button>
+        </div>
+        <img class="ad" src="ad1.png" alt="">
+        <button onclick="notification('alice', 2)" class="alice"><img src="пиздалиса.png" alt="пиздалиса"></button>
+    </div>
+    <div id="4" class="mainsrc playmarket">
+        <p>Загрузка...</p>
+        <div class="load"></div>
+    </div>
+    <div id="5" class="mainsrc vgvideo">
+        <div class="headervg">
+            <img onclick="changesreen(5)" src="вгсмотр.png" alt="вгсмотр">
+        </div>
+        <div class="videos">
+            <div onclick="changesreen(7)" class="video">
+                <img src="https://sun9-73.userapi.com/impg/pqJuvWxCx7kN0zsT_6y5BmW1NW5Fd5TZp58CDg/Z5WHb55RHAk.jpg?size=720x416&quality=95&sign=f3c0d1f60d52eda8c40fd374c722a415&c_uniq_tag=Cjn6ECgR5jUXIipiJu6TIMWnu2lC1HZ9d4p6SE5ZU98&type=video_thumb" alt="">
+                <p>Кирпичъ</p>
+            </div>
+            <div onclick="changesreen(8)" class="video">
+                <img src="https://sun26-2.userapi.com/impg/5PFLjM-nGBw_qUuTRCl1ajKpRa3beohuPj4eHw/6KgMIMS5g8Y.jpg?size=720x405&quality=95&sign=3fef0e73447060db8562a579a9ea66d8&c_uniq_tag=-3ZDgjgOPbAgxfdEq5Kpd9F5x0oDYQP9dmif8Cx-fzc&type=video_thumb" alt="">
+                <p>артемушка лебедушка</p>
+            </div>
+        </div>
+    </div>
+    <div id="7" class="mainsrc vgvideo">
+        <div class="headervg">
+            <img onclick="changesreen(5)" src="вгсмотр.png" alt="вгсмотр">
+        </div>
+        <video controls style="width: 90%; border-radius: 10px;">
+        <source src="вилдео.mp4" type="video/mp4">
+        Ваш браузер не поддерживает видео.
+        </video>
+        <div class="aboutvideo">
+            <p>Кирпичъ</p>
+            <div style="display: flex; align-items: center; margin-top: 5px; gap: 15px;" class="aboutautor">
+                <span style="font-size: 17px; color: grey;">Корзина</span>
+                <span style="font-size: 17px; color: black;"><i style="color: rgb(255, 7, 65);" class="fas fa-heart"></i> 358м</span>
+            </div>
+        </div>
+    </div>
+    <div id="8" class="mainsrc vgvideo">
+        <div class="headervg">
+            <img onclick="changesreen(5)" src="вгсмотр.png" alt="вгсмотр">
+        </div>
+        <video controls style="width: 90%; border-radius: 10px;">
+        <source src="напасть на украину.mp4" type="video/mp4">
+        Ваш браузер не поддерживает видео.
+        </video>
+        <div class="aboutvideo">
+            <p>артемушка лебедушка</p>
+            <div style="display: flex; align-items: center; margin-top: 5px; gap: 15px;" class="aboutautor">
+                <span style="font-size: 17px; color: grey;">артемушка лебедушка</span>
+                <span style="font-size: 17px; color: black;"><i style="color: rgb(255, 7, 65);" class="fas fa-heart"></i> 3</span>
+            </div>
+        </div>
+    </div>
+    <div id="6" class="mainsrc">
+        
+    </div>
+    <div id="notblock" class="notification">
+        <p id="notificationtext">Текст</p>
+        <span id="spanid">Это уведомление тебя</span>
+        <button class="def" onclick="notification(0, 0)">С кайфом</button>
+    </div>
+    <div class="footer">
+        <button onclick="changesreen(1); document.getElementById('search').value = 'ppvp:/main';"><img src="arrow.png" alt="arrow"></button>
+        <input id="search" type="text" value="ppvp:/main">
+        <button onclick="Search(document.getElementById('search').value)"><img style="transform: rotate(180deg);" src="arrow.png" alt="arrow"></button>
+    </div>
+    <script>
+
+        function changesreen(id) {
+            for (let index = 1; index < 9; index++) {
+                document.getElementById(String(index)).classList.remove("active");
+                /* if (id < 3) { if (index < 3) { document.getElementById("butt" + String(index)).classList.remove("active"); } } */
+            };
+            if (id != 2) { document.getElementById("frame").src = ""; };
+            document.getElementById(String(id)).classList.add("active");
+            /*f (id < 3) document.getElementById("butt" + String(id)).classList.add("active");*/
+            document.querySelectorAll("video").forEach(video => {
+                video.pause();
+            });
+        };
+
+        function notification(name, why) {
+            if (why == 0) { document.getElementById("notblock").style.top = "-200px"; return; };
+            document.getElementById("notblock").style.top = "0px";
+            if (why == 1) {
+                document.getElementById("notificationtext").textContent = "Приложение " + name + " не выделывается и с кайфом работает";
+                document.getElementById("spanid").textContent = "SETTINGS";
+            } else if (why == 2) {
+                document.getElementById("notificationtext").textContent = "Пиздолиса не отвечает. Иди нахуй :p";
+                document.getElementById("spanid").textContent = "Яднекс";
+            } else if (why == 3) {
+                document.getElementById("notificationtext").textContent = "Э... ты чего?( я вообще-то тоже как и доебендер ревную :<";
+                document.getElementById("spanid").textContent = "Стор в Шиндовс Кирпич";
+            };
+        };
+
+        function Search(domain) {
+            if (domain == "rk.rk") {
+                changesreen(2);
+                document.getElementById("frame").src = atob("aHR0cHM6Ly8=") + atob("cnVsZTM0Lnh4eA==");
+            };
+        };
+
+        function yadnex(search) {
+            changesreen(2);
+            if (!search.includes("https://")) { search = "https://" + search}
+            document.getElementById("frame").src = search;
+        };
+    </script>
+</body>
+</html>

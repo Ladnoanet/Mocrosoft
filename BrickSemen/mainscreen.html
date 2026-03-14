@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Шиндовс Кирпич Семен</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 <style>
     * {
         margin: 0;
@@ -213,59 +215,61 @@
 </head>
 <body>
     <header>
-        <button onclick="if (appisstarted) { switchScreen('main'); appisstarted = false; document.getElementById('backbutton').style.opacity = '0'; }" id="backbutton"><img src="arrow.png" alt="->"></button>
+        <button onclick="CloseApp()" id="backbutton"><img src="arrow.png" alt="->"></button>
         <p id="time">00:00</p>
     </header>
     <div id="screens" class="screens">
         <main id="main" class="mainscreen">
             <div id="apps" class="apps">
 
-                <div onclick="App('ЬЫТ')" id="1" class="app square threed">
+                <div onclick="App('ЬЫТ')" id="1" class="app square threed appic">
                     <span></span>
                     <img src="ьыт.png" alt="app">
                     <p class="appname">ЬЫТ Нетворк</p>
                 </div>
-                <div onclick="App('Стор')" id="2" class="app square threed">
+                <div onclick="App('Стор')" id="2" class="app square threed appic">
                     <span></span>
                     <img src="магаз.png" alt="app">
                     <p class="appname">No name стор</p>
                 </div>
-                <div onclick="App('Новости')" id="3" class="app long threed">
+                <div onclick="App('Новости')" id="3" class="app long threed appic">
                     <p style="width: 100%;">Шиндовс Кирпич имеет при себе новый Магазин приложений!</p>
                     <div class="flexapp">
                         <p class="appname">Казахстан 6</p>
                         <h1>НОВЫЕ</h1>
                     </div>
                 </div>
-                <div onclick="App('ППВП')" id="4" class="app square threed">
+                <div onclick="App('ППВП')" id="4" class="app square threed appic">
                     <span></span>
                     <img src="ппвп.png" alt="app">
                     <p class="appname">ППВП</p>
                 </div>
-                <div onclick="App('Настройки')" id="5" class="app square threed">
+                <div onclick="App('Настройки')" id="5" class="app square threed appic">
                     <span></span>
                     <img src="сеттингс.png" alt="app">
                     <p class="appname">Вайлас</p>
                 </div>
-                <div onclick="App('Писанина')" id="6" class="app square threed">
-                    <span></span>
-                    <img src="писанина.png" alt="app">
-                    <p class="appname">Писанина</p>
+                <div onclick="App('Погода')" id="6" class="app long threed appic">
+                    <p style="width: 100%;">Жарковатое сегодня лето!</p>
+                    <div class="flexapp">
+                        <p class="appname">солнышко</p>
+                        <h1 style="font-size: 60px;">-855°</h1>
+                    </div>
                 </div>
-                <div onclick="App('Погода')" id="7" class="app square threed">
-                    <span></span>
-                    <img src="солнце.png" alt="app">
-                    <p class="appname">Солнышко</p>
-                </div>
-                <div onclick="App('Слушалки')" id="8" class="app square threed">
+                <div onclick="App('Слушалки')" id="7" class="app square threed appic">
                     <span></span>
                     <img src="музыка.png" alt="app">
                     <p class="appname">Слушалки</p>
                 </div>
-                <div onclick="App('Камера')" id="9" class="app square threed">
+                <div onclick="App('Камера')" id="8" class="app square threed appic">
                     <span></span>
                     <img style="width: 55%; height: auto;" src="камера.png" alt="app">
                     <p class="appname">Слежка</p>
+                </div>
+                <div onclick="App('Звонки')" id="9" class="app square threed appic">
+                    <span></span>
+                    <img src="телефон.png" alt="app">
+                    <p class="appname">Возьми телефон детка</p>
                 </div>
 
             </div>
@@ -275,35 +279,35 @@
              <button onclick="switchScreen('main')" class="buttonarrow"><img src="arrow.png" alt="->"></button>
              <div class="mains allapps">
 
-                <div onclick="App('ЬЫТ')" class="app">
-                    <div class="icon"><img src="ьыт.png" alt="ьыт"></div><span>ЬЫТ Нетворк</span>
+                <div onclick="App('ЬЫТ')" class="app ">
+                    <div class="icon appic"><img src="ьыт.png" alt="ьыт"></div><span>ЬЫТ Нетворк</span>
                 </div>
                 <div onclick="App('Стор')" class="app">
-                    <div class="icon"><img src="магаз.png" alt="ьыт"></div><span>No name стор</span>
+                    <div class="icon appic"><img src="магаз.png" alt="ьыт"></div><span>No name стор</span>
                 </div>
                 <div onclick="App('ППВП')" class="app">
-                    <div class="icon"><img src="ппвп.png" alt="ьыт"></div><span>ППВП Исследователь</span>
+                    <div class="icon appic"><img src="ппвп.png" alt="ьыт"></div><span>ППВП Исследователь</span>
                 </div>
                 <div onclick="App('Настройки')" class="app">
-                    <div class="icon"><img src="сеттингс.png" alt="ьыт"></div><span>Вайлас</span>
-                </div>
-                <div onclick="App('Писанина')" class="app">
-                    <div class="icon"><img src="писанина.png" alt="ьыт"></div><span>Писанина</span>
+                    <div class="icon appic"><img src="сеттингс.png" alt="ьыт"></div><span>Вайлас</span>
                 </div>
                 <div onclick="App('Погода')" class="app">
-                    <div class="icon"><img src="солнце.png" alt="ьыт"></div><span>Солнышко</span>
+                    <div class="icon appic"><img src="солнце.png" alt="ьыт"></div><span>Солнышко</span>
                 </div>
                 <div onclick="App('Слушалки')" class="app">
-                    <div class="icon"><img src="музыка.png" alt="ьыт"></div><span>Слушалки</span>
+                    <div class="icon appic"><img src="музыка.png" alt="ьыт"></div><span>Слушалки</span>
                 </div>
                 <div onclick="App('Камера')" class="app">
-                    <div class="icon"><img src="камера.png" alt="ьыт"></div><span>Слежка</span>
+                    <div class="icon appic"><img src="камера.png" alt="ьыт"></div><span>Слежка</span>
+                </div>
+                <div onclick="App('Звонки')" class="app">
+                    <div class="icon appic"><img src="телефон.png" alt="ьыт"></div><span>Возьми телефон детка</span>
                 </div>
 
              </div>
         </div>
-        <div style="z-index: 98;" id="app" class="otherscreen mainscreen">
-            <p>:3</p>
+        <div style="z-index: 98; padding: 0;" id="app" class="otherscreen mainscreen">
+            <iframe id="appframe" style="width: 100%; height: 100vh;" src="" frameborder="0"></iframe>
         </div>
     </div>
     <script>
@@ -316,6 +320,14 @@
             document.getElementById("time").textContent = timeString;
         }
 
+        if (!localStorage.getItem("BrickTheme")) { localStorage.setItem("BrickTheme", "#1BA1E2") }
+        function updateTheme() {
+            document.querySelectorAll(".appic").forEach(el => {
+                el.style.background = localStorage.getItem("BrickTheme");
+            });
+        }
+        updateTheme();
+
         setInterval(updateTime, 1000);
         updateTime();
 
@@ -326,6 +338,7 @@
 
         function OpenMain() {
             mainisloaded = false;
+            updateTheme();
 
             const apps = document.getElementById("apps");
             const screens = document.getElementById("screens");
@@ -335,7 +348,7 @@
 
             let lastApp;
 
-            for (let index = 1; index < 10; index++) {
+            for (let index = 1; index < 9; index++) {
                 const app = document.getElementById(String(index));
                 lastApp = app;
 
@@ -384,10 +397,23 @@
 
             document.getElementById("backbutton").style.opacity = "1";
             switchScreen("app");
+
+            document.getElementById("app").style.zIndex = "101";
+            document.getElementById("appframe").src = nameofapp + ".html";
         };
         document.addEventListener("click", () => {
             document.documentElement.requestFullscreen();
         }, { once: true });
+
+        function CloseApp() {
+            if (appisstarted) { 
+                switchScreen('main'); 
+                updateTheme(); 
+                appisstarted = false; 
+                document.getElementById('backbutton').style.opacity = '0'; 
+                document.getElementById('app').style.zIndex = '98'; 
+            }
+        }
     </script>
 </body>
 </html>

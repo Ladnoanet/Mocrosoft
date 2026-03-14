@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        *  {
+        color: white;
+        padding: 0; margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    * {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;    
+        outline: none;
+        }
+        *::-webkit-scrollbar {
+            display: none;
+        }
+
+    .threed {
+        transform-style: preserve-3d;
+        transform-origin: left center;
+        animation: modern_anim_open 1s forwards;
+    }
+
+    @keyframes modern_anim_open {
+        0% { transform: rotateY(-70deg); opacity: 0; }
+        100% { transform: rotateY(0deg); opacity: 1; }
+    }
+
+    @keyframes modern_anim_close {
+        0% { transform: rotateY(0deg); opacity: 1; }
+        100% { transform: rotateY(-70deg); opacity: 0; }
+    }
+    
+    h1 {
+        font-weight: 400;
+        font-size: 35px;
+    }
+    h2 {
+        font-weight: 400;
+        font-size: 30px;
+    }
+    button {
+        text-align: left;
+        background: 0; border: 0;
+        font-size: 15px;
+        color: #807F84;
+        &.def { color: white; }
+        &.border { box-sizing: border-box; padding: 5px 15px; border: 1.5px solid white; }
+    }
+    hr {
+        width: 100%;
+        border: 1px solid #807F84;
+    }
+
+    body {
+        background: black;
+        width: 100%;
+        height: calc(100vh - 40px);
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .header {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        align-items: center;
+        display: flex;
+        overflow-x: scroll;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-x;
+        flex-wrap: nowrap;
+        box-sizing: border-box;
+        gap: 15px;
+        height: 10vh;
+
+        & button {
+            height: 100%;
+            font-size: 7vh;
+            font-weight: 400;
+            background: 0;
+            border: 0;
+            color: #807F84;
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            flex-shrink: 0;
+
+            &.active { color: white; }
+        }
+    }
+
+    .mainsrc {
+        background: white;
+        width: 100%;
+        box-sizing: border-box;
+        flex: 1;
+        display: none;
+        padding: 15px;
+        overflow-y: auto;
+
+        &.active {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-start;
+        }
+        & * { color: black; }
+    }
+
+    .notification {
+        position: fixed;
+        top: -200px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        background: #1F1F1F;
+        box-sizing: border-box;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+        transition: all 0.5s;
+
+        & p { font-size: 20px; }
+        & button { 
+            margin-top: 5px;
+            box-sizing: border-box;
+            padding: 5px 15px;
+            border: 1.5px solid white;    
+        }
+    }
+
+    .footer {
+        background: black;
+        width: 100%;
+        display: flex;
+        height: 50px;
+        box-sizing: border-box;
+        padding: 10px;
+        gap: 10px;
+
+        & button {
+            height: 100%;
+            aspect-ratio: 1 / 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1.5px solid white;
+            border-radius: 50%;
+
+            & img { height: 50%; filter: invert(1); }
+        }
+
+        & input {
+            flex: 1;
+            height: 100%;
+            background: white;
+            box-sizing: border-box;
+            border: 0;
+            border-radius: 0;
+            color: black;
+            padding: 0px 5px 0px 5px;
+        }
+    }
+
+    .headerother {
+        width: 100%;
+        height: 60px;
+        background: #BA0001;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-sizing: border-box;
+        padding: 0px 15px 0px 15px;
+
+        & img { height: 50%; filter: invert(1); }
+        p { font-size: 20px; }
+    }
+
+    .ztext {
+        font-size: 17px;
+        font-weight: 600;
+    }
+
+    .news {
+        width: 100%;
+        background: #F3F4F5;
+        box-sizing: border-box;
+        padding: 15px;
+        border-radius: 25px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        & hr { border-color: #d7d6df; }
+    }
+    </style>
+</head>
+<body>
+    <!--<div class="header">
+        <button id="butt1" onclick="changesreen(1)" class="active">CисьТема</button>
+        <button id="butt2" onclick="changesreen(2)" >О ней самой</button>
+        <button id="butt3" onclick="changesreen(3)" >Даундейт</button>
+    </div>-->
+    <div class="headerother">
+        <img src="cci.png" alt="cci">
+        <p>Новости</p>
+    </div>
+    <div id="1" class="mainsrc active">
+        <img style="width: 100%;" src="сиси.png" alt="баннер">
+        <p class="ztext">Мокрософт никого не порадовала Шиндовс Кирпичем</p>
+        <div class="news">
+            <p>Вышла Шиндовс Кирпич Семя с старым Метро дизайном... хмм... Шиндовс Метро?</p>
+            <hr>
+            <p>Обл добл фобл фоб</p>
+            <hr>
+            <p>Был добавлен рабочий магазин приложений, ПО доступно для всех!</p>
+            <hr>
+            <p>Социальная сеть ЬЫТ будет реализована, как реальная соцсеть!</p>
+            <hr>
+            <p>У нас все хорошо, нормально, а не то, что этот загнивающий запад ууу</p>
+        </div>
+    </div>
+    <div id="notblock" class="notification">
+        <p id="notificationtext">Текст</p>
+        <span id="notificationmore">Больше ничего и не надо</span>
+        <button class="def" onclick="App(0)">С кайфом</button>
+    </div>
+    <div class="footer">
+        <button style="opacity: 0.5;"><img src="arrow.png" alt="arrow"></button>
+        <input value="cci.sisi" type="text">
+        <button style="opacity: 0.5;"><img style="transform: rotate(180deg);" src="arrow.png" alt="arrow"></button>
+    </div>
+    <script>
+
+        function changesreen(id) {
+            for (let index = 1; index < 3; index++) {
+                document.getElementById(String(index)).classList.remove("active");
+                /*if (id < 3) { if (index < 3) { document.getElementById("butt" + String(index)).classList.remove("active"); } }*/
+            };
+            document.getElementById(String(id)).classList.add("active");
+            /*if (id < 3) document.getElementById("butt" + String(id)).classList.add("active");*/
+        };
+
+        function notification(name, why) {
+            if (name == 0) { document.getElementById("notblock").style.top = "-200px"; return; };
+            document.getElementById("notblock").style.top = "0px";
+            if (why == 1) {
+                document.getElementById("notificationtext").textContent = "Приложение " + name + " не выделывается и с кайфом работает";
+                document.getElementById("notificationmore").textContent = "SETTINGS";
+            };
+        }
+    </script>
+</body>
+</html>
