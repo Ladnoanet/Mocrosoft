@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        *  {
+        color: white;
+        padding: 0; margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    * {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;    
+        outline: none;
+        }
+        *::-webkit-scrollbar {
+            display: none;
+        }
+
+    .threed {
+        transform-style: preserve-3d;
+        transform-origin: left center;
+        animation: modern_anim_open 1s forwards;
+    }
+
+    @keyframes modern_anim_open {
+        0% { transform: rotateY(-70deg); opacity: 0; }
+        100% { transform: rotateY(0deg); opacity: 1; }
+    }
+
+    @keyframes modern_anim_close {
+        0% { transform: rotateY(0deg); opacity: 1; }
+        100% { transform: rotateY(-70deg); opacity: 0; }
+    }
+    
+    h1 {
+        font-weight: 400;
+        font-size: 35px;
+    }
+    h2 {
+        font-weight: 400;
+        font-size: 30px;
+    }
+    button {
+        text-align: left;
+        background: 0; border: 0;
+        font-size: 15px;
+        color: #807F84;
+        &.def { color: white; }
+        &.border { box-sizing: border-box; padding: 5px 15px; border: 1.5px solid white; }
+    }
+    hr {
+        width: 100%;
+        border: 1px solid #807F84;
+    }
+
+    body {
+        background: black;
+        width: 100%;
+        height: calc(100vh - 40px);
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .header {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        align-items: center;
+        display: flex;
+        overflow-x: scroll;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-x;
+        flex-wrap: nowrap;
+        box-sizing: border-box;
+        gap: 15px;
+        height: 10vh;
+        padding: 0px 10px 0px 10px;
+
+        & button {
+            height: 100%;
+            font-size: 7vh;
+            font-weight: 400;
+            background: 0;
+            border: 0;
+            color: #807F84;
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            flex-shrink: 0;
+
+            &.active { color: white; }
+        }
+    }
+
+    .mainsrc {
+        background: black;
+        width: 100%;
+        box-sizing: border-box;
+        flex: 1;
+        display: none;
+        padding: 20px;
+
+        &.active {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-start;
+        }
+    }
+
+    .notification {
+        position: fixed;
+        top: -200px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        background: #1F1F1F;
+        box-sizing: border-box;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+        transition: all 0.5s;
+
+        & p { font-size: 20px; }
+        & button { 
+            margin-top: 5px;
+            box-sizing: border-box;
+            padding: 5px 15px;
+            border: 1.5px solid white;    
+        }
+    }
+
+    .footer {
+        background: #151515;
+        width: 100%;
+        display: flex;
+        height: 50px;
+        box-sizing: border-box;
+        padding: 10px;
+        justify-content: center;
+        gap: 10px;
+
+        & button {
+            height: 100%;
+            aspect-ratio: 1 / 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1.5px solid white;
+            border-radius: 50%;
+
+            & img { height: 50%; filter: invert(1); }
+        }
+
+        & input {
+            flex: 1;
+            height: 100%;
+            background: white;
+            box-sizing: border-box;
+            border: 0;
+            border-radius: 0;
+            color: black;
+            padding: 0px 5px 0px 5px;
+        }
+    }
+
+    .weather-feel {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+
+        & .feeling {
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            & i { font-size: 60px; }
+            & p { font-size: 20px; color: #576C1F; }
+        }
+    }
+
+    .thinking {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 20px;
+        background: #151515;
+        margin-top: 15px;
+    }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="butt1" onclick="changesreen(1)" class="active">Угадайки Мокрософт</button>
+        <button id="butt2" onclick="changesreen(2)" >Рили</button>
+    </div>
+    <div id="1" class="mainsrc active">
+        <h2 style="margin-bottom: 10px;">Погода по битве экстрасенсов</h2>
+        <div class="weather-feel">
+            <div class="feeling">
+                <i id="symbol-random" class=""></i>
+                <p id="sostoyanie-random">Солнечно</p>
+            </div>
+            <h1 style="transition: all 0.3s;" id="temp-random">0°</h1>
+        </div>
+        <div id="think" class="thinking">
+            Пример размышлений
+        </div>
+    </div>
+    <div id="2" class="mainsrc">
+        <h2 style="margin-bottom: 10px;">Солнышко</h2>
+        <div class="weather-feel">
+            <div class="feeling">
+                <i id="symbol-weather" class=""></i>
+                <p id="sostoyanie-weather">Солнечно</p>
+            </div>
+            <h1 style="transition: all 0.3s;" id="temp-weather">0°</h1>
+        </div>
+        <div id="location" class="thinking">
+            Казахстан
+        </div>
+    </div>
+    <div id="notblock" class="notification">
+        <p id="notificationtext">Текст</p>
+        <span>Больше ничего и не надо</span>
+        <button class="def" onclick="App(0)">С кайфом</button>
+    </div>
+    <div class="footer">
+        <button onclick="random_weather();"><img src="заново.png" alt="плюс"></button>
+        <button onclick="add_to_temp()"><img src="плюс.png" alt="плюс"></button>
+    </div>
+    <script>
+
+        function changesreen(id) {
+            for (let index = 1; index < 3; index++) {
+                document.getElementById(String(index)).classList.remove("active");
+                if (id < 3) { if (index < 3) { document.getElementById("butt" + String(index)).classList.remove("active"); } }
+            };
+            document.getElementById(String(id)).classList.add("active");
+            if (id < 3) document.getElementById("butt" + String(id)).classList.add("active");
+        };
+
+        function notification(name, why) {
+            if (name == 0) { document.getElementById("notblock").style.top = "-200px"; return; };
+            document.getElementById("notblock").style.top = "0px";
+            if (why == 1) {
+                document.getElementById("notificationtext").textContent = "Приложение " + name + " не выделывается и с кайфом работает";
+            };
+        };
+
+        const weather_types = {
+            1: ["fa-sun", "Солняшно"],
+            2: ["fa-cloud-sun", "облако 0.5л"],
+            3: ["fa-cloud", "Не солнечно"],
+            4: ["fa-cloud-showers-heavy", "Охуеть дождь"],
+            5: ["fa-cloud-rain", "Золотой дождь"],
+            6: ["fa-cloud-bolt", "Блатной"],
+            7: ["fa-snowflake", "Снигер"],
+            8: ["fa-smog", "Слепошара"],
+            9: ["fa-wind", "Дутель"],
+        };
+        const weather_thinking = {
+            1: "Я думаю, что погода будет...",
+            2: "Мне тут кошка нашелестела, что точно будет эта!",
+            3: "Я предсказываю своими духами, будет эта погода!",
+            4: "Погода сама все решила за себя",
+            5: "Бог так велел",
+            6: "Я тут посчитал, цифирки прикинул, будет такая погода",
+            7: "Погода значит такая... тебя ебать не должно, как я это понял :p",
+            8: "Похуй",
+            9: "Я это у ChatGPT спросил",
+            10: "Бля буду",
+            11: "Trust me, bro",
+            12: "Ой, вы правильно подметили, это неправильная погода, сейчас исправлюсь",
+            13: "Примета такая",
+            14: "Я чист на рандом вкинул",
+            15: "Я всегда говорю правду!",
+            16: "Не еби мозги, а. и слушай.",
+            17: "Ты все равно дома сидишь, какая тебе разница??",
+            18: "Ванга предсказала",
+            19: "На таро погадал, и выдало это",
+            20: "С тетей зиной посоветовалось"
+        }
+        let random_temp = 0;
+        function random_weather() {
+            let random_weather = Math.floor(Math.random() * 9) + 1;
+            random_temp = Math.floor(Math.random() * 800) - 500;
+
+            document.getElementById("symbol-random").className = "";
+            document.getElementById("symbol-random").classList.add("fas");
+            document.getElementById("symbol-random").classList.add(weather_types[random_weather][0]);
+            document.getElementById("sostoyanie-random").textContent = weather_types[random_weather][1];
+            document.getElementById("temp-random").textContent = random_temp + "°";
+            document.getElementById("think").textContent = weather_thinking[random_weather = Math.floor(Math.random() * 20) + 1]
+        };
+        random_weather();
+        function add_to_temp() {
+            if (random_temp > 1000) {
+                document.getElementById("temp-random").style.color = "#FF0051";
+                setTimeout(() => {
+                    document.getElementById("temp-random").style.color = "white";
+                }, 300);
+            } else {
+                random_temp = random_temp + 100;
+                document.getElementById("temp-random").textContent = random_temp + "°";
+            }
+        };
+
+        const real_weather_types = {
+            1: ["fa-sun", "Солняшно"],
+            2: ["fa-cloud-sun", "облако 0.5л"],
+            3: ["fa-cloud", "Не солнечно"],
+            4: ["fa-cloud-showers-heavy", "Охуеть дождь"],
+            5: ["fa-cloud-rain", "Золотой дождь"],
+            6: ["fa-cloud-bolt", "Блатной"],
+            7: ["fa-snowflake", "Снигер"],
+            8: ["fa-smog", "Слепошара"],
+            9: ["fa-wind", "Дутель"],
+        };
+
+        function getWeatherType(id) {
+
+            if (id >= 200 && id < 300) return 6; // гроза
+            if (id >= 300 && id < 500) return 5; // морось
+            if (id >= 500 && id < 600) return 5; // дождь
+            if (id >= 600 && id < 700) return 7; // снег
+            if (id >= 700 && id < 800) return 8; // туман
+            if (id == 800) return 1; // ясно
+            if (id == 801 || id == 802) return 2; // немного облаков
+            if (id >= 803) return 3; // облачно
+
+            return 3;
+        }
+
+        function whatisweather() {
+
+            const apiKey = atob("MWQ0NzE1ZDU4MjI3OTg4MzkyMmE5ZGNlZDk2YmYwZjE=");
+
+            navigator.geolocation.getCurrentPosition(async (pos) => {
+
+                const lat = pos.coords.latitude;
+                const lon = pos.coords.longitude;
+
+                const res = await fetch(
+                    `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=ru`
+                );
+
+                const data = await res.json();
+
+                const temp = Math.round(data.main.temp);
+                const weatherId = data.weather[0].id;
+                const current_location = data.name;
+
+                const current_weather = getWeatherType(weatherId);
+
+                const icon = document.getElementById("symbol-weather");
+                icon.className = "";
+                icon.classList.add("fas");
+                icon.classList.add(real_weather_types[current_weather][0]);
+
+                document.getElementById("sostoyanie-weather").textContent =
+                    real_weather_types[current_weather][1];
+
+                document.getElementById("temp-weather").textContent = temp + "°";
+
+                document.getElementById("location").textContent = current_location;
+
+            });
+        }
+
+        whatisweather()
+    </script>
+</body>
+</html>
