@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <style>
+        * {
+            padding: 0; margin: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            -webkit-user-select: none;
+            user-select: none;
+            outline: none;
+        }
+        *::-webkit-scrollbar { display: none; }
+
+        body {
+            background: black;
+            width: 100%;
+            height: calc(100vh - 40px);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .header {
+            width: 100%;
+            height: 10vh;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 0 15px;
+            overflow-x: auto;
+            flex-shrink: 0;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-x;
+        }
+        .header button {
+            background: none;
+            border: none;
+            font-size: 7vh;
+            font-weight: 400;
+            color: #555;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: color 0.2s;
+            cursor: pointer;
+            padding: 0;
+        }
+        .header button.active { color: white; }
+
+        .mainsrc {
+            flex: 1;
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            padding: 12px 15px;
+        }
+        .mainsrc.active { display: flex; }
+
+        .musics {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding-bottom: 70px;
+        }
+
+        .music {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 6px 0;
+            cursor: pointer;
+            transition: background 0.15s;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .music:active { background: #111; }
+        .music.playing .music-name { color: #F5027C; }
+
+        .music img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+        .music-name {
+            flex: 1;
+            font-size: 18px;
+            line-height: 1.2;
+        }
+        .music-btn {
+            background: #1F1F1F !important;
+            border: none !important;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: background 0.15s;
+            color: white;
+            font-size: 14px;
+        }
+        .music-btn:active { background: #333 !important; }
+
+        #screen2 .playlist-empty {
+            color: #555;
+            font-size: 20px;
+            margin-top: 20px;
+        }
+        #screen2 .music-btn.remove {
+            color: #F5027C;
+        }
+
+        .musicplay {
+            position: absolute;
+            bottom: -80px;
+            left: 0;
+            width: 100%;
+            background: #1F1F1F;
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: bottom 0.35s cubic-bezier(.4,0,.2,1);
+            z-index: 100;
+        }
+        .musicplay.visible { bottom: 0; }
+
+        .musicplay img {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+        .musicplay p {
+            flex: 1;
+            font-size: 16px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        .musicplay .ctrl {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            color: white;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .musicplay .ctrl-close {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .notification {
+            position: fixed;
+            top: -200px;
+            left: 0;
+            width: 100%;
+            background: #1F1F1F;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            transition: top 0.4s cubic-bezier(.4,0,.2,1);
+            z-index: 200;
+        }
+        .notification p { font-size: 18px; }
+        .notification span { font-size: 14px; color: #aaa; }
+        .notification button {
+            background: none;
+            border: 1.5px solid white;
+            color: white;
+            font-size: 14px;
+            padding: 5px 14px;
+            cursor: pointer;
+            align-self: flex-start;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <button id="butt1" onclick="changeScreen(1)" class="active">Музыкс</button>
+        <button id="butt2" onclick="changeScreen(2)">Игратьсписок</button>
+    </div>
+
+    <!-- SCREEN 1: All tracks -->
+    <div id="screen1" class="mainsrc active">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+            <h1 class="colorel" style="color:#F5027C;font-size:32px;font-weight:400;">слушалки</h1>
+        </div>
+        <h2 style="font-size:24px;font-weight:400;">Рекоминдированное</h2>
+        <div class="musics" id="trackList"></div>
+    </div>
+
+    <!-- SCREEN 2: Playlist -->
+    <div id="screen2" class="mainsrc">
+        <h1 class="colorel" style="color:#F5027C;font-size:32px;font-weight:400;">плейлист</h1>
+        <div class="musics" id="playlistDiv"></div>
+    </div>
+
+    <!-- Now playing bar -->
+    <div class="musicplay" id="musicplay">
+        <img id="playImg" src="" alt="">
+        <p id="playName">Название трека</p>
+        <button class="ctrl" id="btnPause" onclick="pauseMusic()"><i class="fas fa-pause"></i></button>
+        <button class="ctrl" id="btnPlay" onclick="resumeMusic()" style="display:none;"><i class="fas fa-play"></i></button>
+        <button class="ctrl ctrl-close" onclick="closePlayer()"><i class="fas fa-times"></i></button>
+    </div>
+
+    <!-- Notification -->
+    <div id="notblock" class="notification">
+        <p id="notificationtext">Текст</p>
+        <span id="notabout">Больше ничего и не надо</span>
+        <button onclick="hideNotification()">С кайфом</button>
+    </div>
+
+    <audio id="audioEl"></audio>
+
+    <script>
+        const tracks = [
+            { name: "The Only",            img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzdSibc5UflnLFxlf6_Ze4hAq_mP7z-n0p2Q&s" },
+            { name: "Killer Queen",        img: "https://upload.wikimedia.org/wikipedia/ru/d/d9/Killer_Queen.jpg" },
+            { name: "Камера пыток",        img: "https://images.genius.com/91fcfc1521141071dfe4502f3014eb53.1000x1000x1.png" },
+            { name: "Мама, я люблю",       img: "https://images.genius.com/651958ad5f2e81ee65c46ad2b69ba031.1000x1000x1.png" },
+            { name: "The hamster dance",   img: "https://avatars.yandex.net/get-music-content/149669/28a254c4.a.2461922-2/m1000x1000" },
+            { name: "Перемен",             img: "https://i1.sndcdn.com/artworks-3fkjHzT1tesCbPF5-3D6qlQ-t500x500.jpg" },
+            { name: "my angel",            img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfCs7BtetvdwGwa6u7HJ8rggVDlRLQLiWEyA&s" },
+            { name: "I Bet On Losing Dogs",img: "https://i1.sndcdn.com/artworks-6LrxWtiCF9zF-0-t500x500.jpg" },
+            { name: "Заработать на мне",   img: "https://images.genius.com/d5b104d59af2965edd618e12e54e645d.1000x1000x1.png" },
+            { name: "Агония",              img: "https://cdn-images.dzcdn.net/images/cover/256ad082c5d1e5d7512d4e448a7c7bdf/0x1900-000000-80-0-0.jpg" },
+            { name: "sister",              img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9hIrjrzr4kMdcfFpodY1qdlQmjyKwlAcdTQ&s" },
+            { name: "Гей порно",           img: "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/e0/4a/43/e04a4374-7b57-6e0a-3340-dd3a05bf1339/cover.jpg/600x600cc.webp" },
+            { name: "Ебаца",               img: "suno.png" },
+            { name: "Ты",                  img: "suno.png" }
+        ];
+
+        let currentIdx = -1;
+        let playlist = JSON.parse(localStorage.getItem('wp_playlist') || '[]');
+        const audio = document.getElementById('audioEl');
+
+        function renderTracks() {
+            const list = document.getElementById('trackList');
+            list.innerHTML = '';
+            tracks.forEach((t, i) => {
+                const div = document.createElement('div');
+                div.className = 'music' + (i === currentIdx ? ' playing' : '');
+                div.id = 'track_' + i;
+                div.innerHTML = `
+                    <img src="${t.img}" alt="${t.name}">
+                    <span class="music-name">${t.name}</span>
+                    <button class="music-btn" onclick="event.stopPropagation(); addToPlaylist(${i})"><i class="fas fa-plus"></i></button>
+                `;
+                div.addEventListener('click', () => playMusic(i));
+                list.appendChild(div);
+            });
+        }
+
+        function renderPlaylist() {
+            const div = document.getElementById('playlistDiv');
+            div.innerHTML = '';
+            if (playlist.length === 0) {
+                div.innerHTML = '<p class="playlist-empty">Плейлист пуст</p>';
+                return;
+            }
+            playlist.forEach((idx, pos) => {
+                const t = tracks[idx];
+                const item = document.createElement('div');
+                item.className = 'music' + (idx === currentIdx ? ' playing' : '');
+                item.innerHTML = `
+                    <img src="${t.img}" alt="${t.name}">
+                    <span class="music-name">${t.name}</span>
+                    <button class="music-btn remove" onclick="event.stopPropagation(); removeFromPlaylist(${pos})"><i class="fas fa-minus"></i></button>
+                `;
+                item.addEventListener('click', () => playMusic(idx));
+                div.appendChild(item);
+            });
+        }
+
+        function playMusic(idx) {
+            currentIdx = idx;
+            const t = tracks[idx];
+            audio.src = 'music/' + idx + '.mp3';
+            audio.play().catch(() => {});
+            document.getElementById('playName').textContent = t.name;
+            document.getElementById('playImg').src = t.img;
+            document.getElementById('musicplay').classList.add('visible');
+            document.getElementById('btnPause').style.display = 'flex';
+            document.getElementById('btnPlay').style.display = 'none';
+            renderTracks();
+            renderPlaylist();
+        }
+
+        function pauseMusic() {
+            audio.pause();
+            document.getElementById('btnPause').style.display = 'none';
+            document.getElementById('btnPlay').style.display = 'flex';
+        }
+
+        function resumeMusic() {
+            audio.play().catch(() => {});
+            document.getElementById('btnPause').style.display = 'flex';
+            document.getElementById('btnPlay').style.display = 'none';
+        }
+
+        function closePlayer() {
+            audio.pause();
+            audio.src = '';
+            currentIdx = -1;
+            document.getElementById('musicplay').classList.remove('visible');
+            renderTracks();
+            renderPlaylist();
+        }
+
+        function addToPlaylist(idx) {
+            if (playlist.includes(idx)) {
+                showNotification(tracks[idx].name, 'already');
+                return;
+            }
+            playlist.push(idx);
+            localStorage.setItem('wp_playlist', JSON.stringify(playlist));
+            renderPlaylist();
+            showNotification(tracks[idx].name, 'added');
+        }
+
+        function removeFromPlaylist(pos) {
+            playlist.splice(pos, 1);
+            localStorage.setItem('wp_playlist', JSON.stringify(playlist));
+            renderPlaylist();
+        }
+
+        let notTimer;
+        function showNotification(name, type) {
+            clearTimeout(notTimer);
+            const text = document.getElementById('notificationtext');
+            const about = document.getElementById('notabout');
+            if (type === 'added') {
+                text.textContent = '+ ' + name;
+                about.textContent = 'Добавлено в плейлист';
+            } else {
+                text.textContent = name;
+                about.textContent = 'Уже в плейлисте';
+            }
+            document.getElementById('notblock').style.top = '0px';
+            notTimer = setTimeout(hideNotification, 2500);
+        }
+
+        function hideNotification() {
+            document.getElementById('notblock').style.top = '-200px';
+        }
+
+        function changeScreen(id) {
+            [1, 2].forEach(i => {
+                document.getElementById('screen' + i).classList.remove('active');
+                document.getElementById('butt' + i).classList.remove('active');
+            });
+            document.getElementById('screen' + id).classList.add('active');
+            document.getElementById('butt' + id).classList.add('active');
+        }
+
+        renderTracks();
+        renderPlaylist();
+
+        document.querySelectorAll(".colorel").forEach(el => {
+            el.style.color = localStorage.getItem("BrickTheme");
+        });
+    </script>
+</body>
+</html>

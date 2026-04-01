@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+    <style>
+        *  {
+        color: white;
+        padding: 0; margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    * {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;    
+        outline: none;
+        }
+        *::-webkit-scrollbar {
+            display: none;
+        }
+
+    .threed {
+        transform-style: preserve-3d;
+        transform-origin: left center;
+        animation: modern_anim_open 1s forwards;
+    }
+
+    @keyframes modern_anim_open {
+        0% { transform: rotateY(-70deg); opacity: 0; }
+        100% { transform: rotateY(0deg); opacity: 1; }
+    }
+
+    @keyframes modern_anim_close {
+        0% { transform: rotateY(0deg); opacity: 1; }
+        100% { transform: rotateY(-70deg); opacity: 0; }
+    }
+    
+    h1 {
+        font-weight: 400;
+        font-size: 35px;
+    }
+    h2 {
+        font-weight: 400;
+        font-size: 30px;
+    }
+    button {
+        text-align: left;
+        background: 0; border: 0;
+        font-size: 15px;
+        color: #807F84;
+        &.def { color: white; }
+        &.border { box-sizing: border-box; padding: 5px 15px; border: 1.5px solid white; }
+    }
+    hr {
+        width: 100%;
+        border: 1px solid #807F84;
+    }
+
+    body {
+        background: black;
+        width: 100%;
+        height: calc(100vh - 40px);
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .header {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        align-items: center;
+        display: flex;
+        overflow-x: scroll;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-x;
+        flex-wrap: nowrap;
+        box-sizing: border-box;
+        gap: 15px;
+        height: 10vh;
+        padding: 0px 10px 0px 10px;
+
+        & button {
+            height: 100%;
+            font-size: 7vh;
+            font-weight: 400;
+            background: 0;
+            border: 0;
+            color: #807F84;
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            flex-shrink: 0;
+
+            &.active { color: white; }
+        }
+    }
+
+    .mainsrc {
+        background: white;
+        width: 100%;
+        box-sizing: border-box;
+        flex: 1;
+        display: none;
+
+        &.active {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-start;
+        }
+    }
+
+    .notification {
+        position: fixed;
+        top: -200px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        background: #1F1F1F;
+        box-sizing: border-box;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+        transition: all 0.5s;
+
+        & p { font-size: 20px; }
+        & button { 
+            margin-top: 5px;
+            box-sizing: border-box;
+            padding: 5px 15px;
+            border: 1.5px solid white;    
+        }
+    }
+
+    .footer {
+        background: black;
+        width: 100%;
+        display: flex;
+        height: 50px;
+        box-sizing: border-box;
+        padding: 10px;
+        gap: 10px;
+
+        & button {
+            height: 100%;
+            aspect-ratio: 1 / 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1.5px solid white;
+            border-radius: 50%;
+
+            & img { height: 50%; filter: invert(1); }
+        }
+
+        & input {
+            flex: 1;
+            height: 100%;
+            background: white;
+            box-sizing: border-box;
+            border: 0;
+            border-radius: 0;
+            color: black;
+            padding: 0px 5px 0px 5px;
+        }
+    }
+
+    .maph {
+        padding: 10px;
+        overflow-x: hidden;
+
+        & .photos {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            width: 100%;
+        }
+
+        & .photos img {
+            width: 70px;
+            height: 70px;
+            aspect-ratio: 1 / 1;
+        }
+    }
+
+    .imgpreview {
+        width: 100%;
+        z-index: 1000;
+        height: 100%;
+        position: fixed;
+        background: rgba(0,0,0,0.7);
+        backdrop-filter: blur(5px);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+
+        display: none;
+
+        & button {
+            width: 12.5%;
+            aspect-ratio: 1 / 1;
+            max-height: min-content;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            padding: 0;
+            margin: 15px;
+
+            & img { height: 50%; filter: invert(1); }
+        }
+
+        & .imgpr {
+            width: 100%;
+        }
+    }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="butt1" onclick="changesreen(1)" class="active">Слежолка</button>
+    </div>
+    <div id="1" class="mainsrc active">
+        <video id="camera" autoplay playsinline style="width: 100%; height: 100%; background: white; object-fit: cover;"></video>
+    </div>
+    <div id="2" class="mainsrc maph" style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('photobcg.png') center/cover no-repeat;">
+        <h1>Форточки</h1>
+        <p style="margin-top: 30px;">Смотряшки</p>
+        <div class="photos">
+            <img onclick="showing(1)" src="https://i.pinimg.com/736x/be/60/c6/be60c63507e68865194475b6fdacdfed.jpg">
+            <img onclick="showing(2)" src="https://i.pinimg.com/736x/9f/51/ac/9f51ac878f5989b3269a7dde3aabb707.jpg">
+            <img onclick="showing(3)" src="https://i.pinimg.com/736x/56/2b/e3/562be3aafc158d8a356472565d37d6eb.jpg">
+            <img onclick="showing(4)" src="https://i.pinimg.com/736x/f1/a8/bb/f1a8bb31f48acafd2b14764982730715.jpg">
+            <img onclick="showing(5)" src="https://i.pinimg.com/736x/88/d9/18/88d918a52f1106113b4b5d0aac7be193.jpg">
+        </div>
+        <div class="photos">
+            <img onclick="showing(6)" src="https://i.pinimg.com/1200x/12/26/ee/1226ee007e9b9d904b6caef9aac47539.jpg">
+            <img onclick="showing(7)" src="https://i.pinimg.com/736x/3c/72/8d/3c728d5034ef31ff1de2234dee9d975b.jpg">
+            <img onclick="showing(8)" src="https://i.pinimg.com/736x/ad/d0/2e/add02e07f87474e5ae310f39a3dee884.jpg">
+            <img onclick="showing(9)" src="https://i.pinimg.com/736x/16/9d/9c/169d9c3682bcde2391ed8f3ca8a6bc0b.jpg">
+            <img onclick="showing(10)" src="https://i.pinimg.com/736x/1d/0b/d1/1d0bd1cb73bd0a3635c397e5311b9857.jpg">
+        </div>
+    </div>
+    <div class="footer">
+        <div id="fot1" style="width: 100%; display: flex; align-items: center; justify-content: space-between;" class="onef">
+            <button style="opacity: 0;"></button>
+            <button onclick="notification('Слежка', 3)"></button>
+            <button onclick="changesreen(2)"><img style="transform: rotate(180deg);" src="arrow.png" alt="стрелка"></button>            
+        </div>
+        <div id="fot2" style="width: 100%; align-items: center; justify-content: flex-start; display: none;">
+            <button onclick="changesreen(1)"><img src="arrow.png" alt="стрелка"></button>
+        </div>
+    </div>
+
+    <div id="preview" class="imgpreview">
+        <button class="border" onclick="showing(0)"><img src="arrow.png" alt="стрелка"></button>
+        <img id="imgpr" class="imgpr" src="#" alt="img">
+    </div>
+
+    <div id="notblock" class="notification">
+        <p id="notificationtext">Текст</p>
+        <span id="notabout">Больше ничего и не надо</span>
+        <button class="def" onclick="notification(0)">С кайфом</button>
+    </div>
+    <script>
+
+        function changesreen(id) {
+            for (let index = 1; index < 3; index++) {
+                document.getElementById(String(index)).classList.remove("active");
+                // if (id < 3) { if (index < 3) { document.getElementById("butt" + String(index)).classList.remove("active"); } }
+            };
+            document.getElementById(String(id)).classList.add("active");
+            // if (id < 3) document.getElementById("butt" + String(id)).classList.add("active");
+            if (id == 1) { document.getElementById("fot1").style.display = "flex"; document.getElementById("fot2").style.display = "none"; }
+            else { document.getElementById("fot2").style.display = "flex"; document.getElementById("fot1").style.display = "none"; }
+        };
+
+        function notification(name, why) {
+            if (name == 0) { document.getElementById("notblock").style.top = "-200px"; return; };
+            document.getElementById("notblock").style.top = "0px";
+            document.getElementById("notabout").textContent = name;
+            if (why == 1) {
+                document.getElementById("notificationtext").textContent = "Приложение " + name + " не выделывается и с кайфом работает";
+            } else if (why == 2) {
+                document.getElementById("notificationtext").textContent = "Подключение к камере не случилось(( не мои проблемы";
+            } else if (why == 3) {
+                document.getElementById("notificationtext").textContent = "Ты фоткать захотел?)) много хочешь!";
+            };
+        };
+
+        async function startCamera() {
+            const video = document.getElementById('camera');
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+                video.srcObject = stream;
+            } catch (err) {
+                console.error('Ошибка доступа к камере:', err);
+                notification('Слежка', 2);
+            }
+        };
+
+        const photos = {
+            1: "https://i.pinimg.com/736x/be/60/c6/be60c63507e68865194475b6fdacdfed.jpg",
+            2: "https://i.pinimg.com/736x/9f/51/ac/9f51ac878f5989b3269a7dde3aabb707.jpg",
+            3: "https://i.pinimg.com/736x/56/2b/e3/562be3aafc158d8a356472565d37d6eb.jpg",
+            4: "https://i.pinimg.com/736x/f1/a8/bb/f1a8bb31f48acafd2b14764982730715.jpg",
+            5: "https://i.pinimg.com/736x/88/d9/18/88d918a52f1106113b4b5d0aac7be193.jpg",
+            6: "https://i.pinimg.com/1200x/12/26/ee/1226ee007e9b9d904b6caef9aac47539.jpg",
+            7: "https://i.pinimg.com/736x/3c/72/8d/3c728d5034ef31ff1de2234dee9d975b.jpg",
+            8: "https://i.pinimg.com/736x/ad/d0/2e/add02e07f87474e5ae310f39a3dee884.jpg",
+            9: "https://i.pinimg.com/736x/16/9d/9c/169d9c3682bcde2391ed8f3ca8a6bc0b.jpg",
+            10: "https://i.pinimg.com/736x/1d/0b/d1/1d0bd1cb73bd0a3635c397e5311b9857.jpg"
+        };
+
+
+        function showing(img) {
+            if (img == 0) { document.getElementById("preview").style.display = "none"; return; }
+            //fuck
+            document.getElementById("preview").style.display = "flex";
+            document.getElementById("imgpr").src = photos[img];
+        };
+
+        window.addEventListener('load', startCamera);
+    </script>
+</body>
+</html>

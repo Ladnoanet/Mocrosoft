@@ -188,8 +188,8 @@
     </div>
     <div id="notblock" class="notification">
         <p id="notificationtext">Текст</p>
-        <span>Больше ничего и не надо</span>
-        <button class="def" onclick="App(0)">С кайфом</button>
+        <span id="notabout">Больше ничего и не надо</span>
+        <button class="def" onclick="notification(0)">С кайфом</button>
     </div>
     <div class="footer">
         <button><img src="arrow.png" alt="arrow"></button>
@@ -210,10 +210,11 @@
         function notification(name, why) {
             if (name == 0) { document.getElementById("notblock").style.top = "-200px"; return; };
             document.getElementById("notblock").style.top = "0px";
+            document.getElementById("notabout").textContent = name;
             if (why == 1) {
                 document.getElementById("notificationtext").textContent = "Приложение " + name + " не выделывается и с кайфом работает";
             };
-        }
+        };
     </script>
 </body>
 </html>

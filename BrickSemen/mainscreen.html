@@ -91,6 +91,7 @@
         display: flex; align-items: center; justify-content: center;
         background: 0; border: 2px solid white;
         border-radius: 50%;
+        align-self: flex-start;
         & img { height: 45%; filter: invert(1); }
     }
 
@@ -115,6 +116,16 @@
         opacity: 0;
         box-sizing: border-box;
         padding: 15px;
+    }
+
+    .sysbtss {
+        display: flex;
+        flex-direction: column;
+        width: 12.5%;
+        height: auto;
+        justify-content: flex-start;
+        align-items: flex-start; 
+        gap: 10px;
     }
 
     .screens {
@@ -211,6 +222,10 @@
         }
     }
 
+    & .nok {
+        display: none;
+    }
+
 </style>
 </head>
 <body>
@@ -230,7 +245,7 @@
                 <div onclick="App('Стор')" id="2" class="app square threed appic">
                     <span></span>
                     <img src="магаз.png" alt="app">
-                    <p class="appname">No name стор</p>
+                    <p class="appname">ПВЗ оЗонт</p>
                 </div>
                 <div onclick="App('Новости')" id="3" class="app long threed appic">
                     <p style="width: 100%;">Шиндовс Кирпич имеет при себе новый Магазин приложений!</p>
@@ -271,12 +286,30 @@
                     <img src="телефон.png" alt="app">
                     <p class="appname">Возьми телефон детка</p>
                 </div>
+                <div onclick="App('./store/Нампад')" id="10" class="app square threed appic appm1">
+                    <span></span>
+                    <img src="./store/store-нампад.png" alt="app">
+                    <p class="appname">Нампад</p>
+                </div>
+                <div onclick="App('./store/Писанина')" id="11" class="app square threed appic appm2">
+                    <span></span>
+                    <img style="width: 55%; height: auto;" src="./store/store-писанина.png" alt="app">
+                    <p class="appname">Писанина</p>
+                </div>
+                <div onclick="App('./store/Тиктик')" id="12" class="app square threed appic appm3">
+                    <span></span>
+                    <img src="./store/store-тиктик.png" alt="app">
+                    <p class="appname">Тиктик</p>
+                </div>
 
             </div>
             <button onclick="switchScreen('appsall')" class="buttonarrow"><img  style="transform: rotate(180deg);" src="arrow.png" alt="->"></button>
         </main>
         <div id="appsall" class="otherscreen mainscreen">
-             <button onclick="switchScreen('main')" class="buttonarrow"><img src="arrow.png" alt="->"></button>
+            <div class="sysbtss">
+                <button onclick="switchScreen('main')" class="buttonarrow" style="width: 100%; height: 100%;"><img src="arrow.png" alt="->"></button>
+                <button onclick="window.location.href = 'lock.html'" class="buttonarrow" style="width: 100%; height: 100%;"><img style="height: 50%;" src="key.png" alt="<-"></button>
+            </div>
              <div class="mains allapps">
 
                 <div onclick="App('ЬЫТ')" class="app ">
@@ -302,6 +335,15 @@
                 </div>
                 <div onclick="App('Звонки')" class="app">
                     <div class="icon appic"><img src="телефон.png" alt="ьыт"></div><span>Возьми телефон детка</span>
+                </div>
+                <div onclick="App('./store/Нампад')" id="app1" class="app">
+                    <div class="icon appic"><img src="./store/store-нампад.png" alt="ьыт"></div><span>Нампад</span>
+                </div>
+                <div onclick="App('./store/Писанина')" id="app2" class="app">
+                    <div class="icon appic"><img src="./store/store-писанина.png" alt="ьыт"></div><span>Писанина</span>
+                </div>
+                <div onclick="App('./store/Тиктик')" id="app3" class="app">
+                    <div class="icon appic"><img src="./store/store-тиктик.png" alt="ьыт"></div><span>Тиктик</span>
                 </div>
 
              </div>
@@ -348,7 +390,7 @@
 
             let lastApp;
 
-            for (let index = 1; index < 9; index++) {
+            for (let index = 1; index < 13; index++) {
                 const app = document.getElementById(String(index));
                 lastApp = app;
 
@@ -360,10 +402,27 @@
                 apps.style.overflowY = "auto";
                 screens.style.overflow = "hidden";
                 mainisloaded = true;
+                updateApps();
             }, { once: true });
         }
 
         OpenMain();
+
+        let appsdownload = JSON.parse(localStorage.getItem("brickapps")) || [];
+        let allapps = 3;
+        function updateApps() {
+            appsdownload = JSON.parse(localStorage.getItem("brickapps")) || [];
+
+            for (let index = 1; index <= allapps; index++) {
+                if (appsdownload.includes(index)) {
+                    document.getElementById("app" + index).style.display = "flex";
+                    document.querySelector(".appm" + index).style.display = "flex";
+                } else {
+                    document.getElementById("app" + index).style.display = "none";
+                    document.querySelector(".appm" + index).style.display = "none";
+                }
+            }
+        }
 
         function switchScreen(next) {
 
@@ -399,8 +458,14 @@
             switchScreen("app");
 
             document.getElementById("app").style.zIndex = "101";
-            document.getElementById("appframe").src = nameofapp + ".html";
+
+            if (nameofapp == "ЬЫТ") {
+                document.getElementById("appframe").src = "https://ladnoanet.github.io/YIT-Network/indexB.html"
+            } else {
+                document.getElementById("appframe").src = nameofapp + ".html";
+            }
         };
+
         document.addEventListener("click", () => {
             document.documentElement.requestFullscreen();
         }, { once: true });
@@ -413,7 +478,20 @@
                 document.getElementById('backbutton').style.opacity = '0'; 
                 document.getElementById('app').style.zIndex = '98'; 
             }
-        }
+        };
+
+        window.addEventListener('message', (e) => {
+            if (!e.data || !e.data.cmd) return;
+
+            switch (e.data.cmd) {
+                case 'closeapp':
+                    CloseApp();
+                    break;
+                case 'appactions':
+                    updateApps()
+                    break;
+            }
+        });
     </script>
 </body>
 </html>

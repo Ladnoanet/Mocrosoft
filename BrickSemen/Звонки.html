@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <style>
+        * {
+            color: white;
+            padding: 0; margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            -webkit-user-select: none;
+            user-select: none;
+            outline: none;
+            box-sizing: border-box;
+        }
+        *::-webkit-scrollbar { display: none; }
+
+        body {
+            background: black;
+            width: 100%;
+            height: calc(100vh - 40px);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .header {
+            width: 100%;
+            height: 10vh;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 0 10px;
+            overflow-x: auto;
+            flex-shrink: 0;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-x;
+        }
+        .header button {
+            height: 100%;
+            font-size: 7vh;
+            font-weight: 400;
+            background: none;
+            border: none;
+            color: #807F84;
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+        .header button.active { color: white; }
+
+        .mainsrc {
+            flex: 1;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .mainsrc.active { display: flex; }
+
+        /* DIALER */
+        #screen-dialer {
+            padding: 10px 15px 15px;
+            justify-content: space-between;
+        }
+
+        .number-display {
+            font-size: 42px;
+            font-weight: 300;
+            letter-spacing: 4px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 0 5px;
+            flex-shrink: 0;
+        }
+        .number-display span {
+            flex: 1;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            direction: rtl;
+            text-align: left;
+        }
+        .number-display button {
+            background: none;
+            border: none;
+            color: #555;
+            font-size: 28px;
+            cursor: pointer;
+            padding: 0 0 0 10px;
+            flex-shrink: 0;
+        }
+        .number-display button:active { color: white; }
+
+        .keypad {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: 2px;
+        }
+
+        .key {
+            background: none;
+            border: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            transition: background 0.1s;
+            border-radius: 2px;
+        }
+        .key:active { background: #1a1a1a; }
+
+        .key .digit {
+            font-size: 36px;
+            font-weight: 300;
+            line-height: 1;
+        }
+        .key .letters {
+            font-size: 10px;
+            color: #666;
+            letter-spacing: 2px;
+            height: 14px;
+            line-height: 14px;
+        }
+
+        .call-btn-wrap {
+            display: flex;
+            justify-content: center;
+            padding: 10px 0 0;
+            flex-shrink: 0;
+        }
+        .call-btn {
+            background: #F5027C;
+            border: none;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .call-btn:active { background: #c00060; }
+        .call-btn i { font-size: 28px; color: white; }
+
+        /* CALLING SCREEN */
+        #screen-calling {
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            padding: 20px;
+        }
+
+        .calling-number {
+            font-size: 38px;
+            font-weight: 300;
+            letter-spacing: 3px;
+            text-align: center;
+        }
+
+        .calling-status {
+            font-size: 18px;
+            color: #888;
+            text-align: center;
+            min-height: 28px;
+            transition: color 0.3s;
+        }
+        .calling-status.danger { color: #F5027C; }
+
+        .calling-icon {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .calling-icon i { font-size: 38px; color: #F5027C; }
+
+        .notification {
+            position: absolute;
+            top: -200px;
+            left: 0;
+            width: 100%;
+            background: #1F1F1F;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: flex-start;
+            transition: top 0.4s cubic-bezier(.4,0,.2,1);
+            z-index: 200;
+        }
+        .notification p { font-size: 20px; }
+        .notification span { font-size: 14px; color: #aaa; }
+        .notification button {
+            margin-top: 4px;
+            background: none;
+            border: 1.5px solid white;
+            color: white;
+            font-size: 14px;
+            padding: 5px 14px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <button id="butt1" class="active">Звонки</button>
+    </div>
+
+    <div id="screen-dialer" class="mainsrc active">
+        <div class="number-display">
+            <span id="numberDisplay"></span>
+            <button onclick="deleteLast()"><i class="fas fa-backspace"></i></button>
+        </div>
+
+        <div class="keypad">
+            <button class="key" onclick="pressKey('1')"><span class="digit">1</span><span class="letters"> </span></button>
+            <button class="key" onclick="pressKey('2')"><span class="digit">2</span><span class="letters">АБВГ</span></button>
+            <button class="key" onclick="pressKey('3')"><span class="digit">3</span><span class="letters">ДЕЁЖ</span></button>
+            <button class="key" onclick="pressKey('4')"><span class="digit">4</span><span class="letters">ЗИЙК</span></button>
+            <button class="key" onclick="pressKey('5')"><span class="digit">5</span><span class="letters">ЛМНО</span></button>
+            <button class="key" onclick="pressKey('6')"><span class="digit">6</span><span class="letters">ПРСТ</span></button>
+            <button class="key" onclick="pressKey('7')"><span class="digit">7</span><span class="letters">УФХЦ</span></button>
+            <button class="key" onclick="pressKey('8')"><span class="digit">8</span><span class="letters">ЧШЩЪ</span></button>
+            <button class="key" onclick="pressKey('9')"><span class="digit">9</span><span class="letters">ЫЬЭЮЯ</span></button>
+            <button class="key" onclick="pressKey('*')"><span class="digit">*</span><span class="letters"> </span></button>
+            <button class="key" onclick="pressKey('0')"><span class="digit">0</span><span class="letters">+</span></button>
+            <button class="key" onclick="pressKey('#')"><span class="digit">#</span><span class="letters"> </span></button>
+        </div>
+
+        <div class="call-btn-wrap">
+            <button class="call-btn colorell" onclick="startCall()"><i class="fas fa-phone"></i></button>
+        </div>
+    </div>
+
+    <div id="screen-calling" class="mainsrc">
+        <div class="calling-icon"><i class="fas fa-phone colorel"></i></div>
+        <div class="calling-number" id="callingNumber"></div>
+        <div class="calling-status colorel" id="callingStatus">вызов...</div>
+    </div>
+
+    <div id="notblock" class="notification">
+        <p id="notificationText">Текст</p>
+        <span id="notificationAbout"></span>
+        <button onclick="hideNotification()">С кайфом</button>
+    </div>
+
+    <audio id="audioEl"></audio>
+
+    <script>
+        let number = '';
+        const audio = document.getElementById('audioEl');
+
+        function pressKey(k) {
+            number += k;
+            document.getElementById('numberDisplay').textContent = number;
+        }
+
+        function deleteLast() {
+            number = number.slice(0, -1);
+            document.getElementById('numberDisplay').textContent = number;
+        }
+
+        function showScreen(id) {
+            document.querySelectorAll('.mainsrc').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        function startCall() {
+            if (!number) return;
+            document.getElementById('callingNumber').textContent = number;
+            document.getElementById('callingStatus').textContent = 'вызов...';
+            document.getElementById('callingStatus').classList.remove('danger');
+            showScreen('screen-calling');
+
+            audio.src = 'phone.mp3';
+            audio.loop = true;
+            audio.play().catch(() => {});
+
+            setTimeout(() => {
+                audio.pause();
+                audio.loop = false;
+
+                const status = document.getElementById('callingStatus');
+                status.textContent = 'подключение ФСБ...';
+                status.classList.add('danger');
+
+                audio.src = 'fsb.mp3';
+                audio.loop = false;
+                audio.play().catch(() => {});
+
+                audio.onended = () => {
+                    audio.onended = null;
+                    showScreen('screen-dialer');
+                    showNotification('Звонок был сброшен', 'Собеседник завершил вызов');
+                };
+            }, 3000);
+        }
+
+        function showNotification(text, about) {
+            document.getElementById('notificationText').textContent = text;
+            document.getElementById('notificationAbout').textContent = about || '';
+            document.getElementById('notblock').style.top = '0px';
+        }
+
+        function hideNotification() {
+            document.getElementById('notblock').style.top = '-200px';
+        }
+
+        document.querySelectorAll(".colorel").forEach(el => {
+            el.style.color = localStorage.getItem("BrickTheme");
+        });
+        document.querySelector(".colorell").style.background = localStorage.getItem("BrickTheme");
+    </script>
+</body>
+</html>

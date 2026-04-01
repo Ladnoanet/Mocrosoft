@@ -210,7 +210,7 @@
         <div class="weather-feel">
             <div class="feeling">
                 <i id="symbol-random" class=""></i>
-                <p id="sostoyanie-random">Солнечно</p>
+                <p class="colorel" id="sostoyanie-random">Солнечно</p>
             </div>
             <h1 style="transition: all 0.3s;" id="temp-random">0°</h1>
         </div>
@@ -223,7 +223,7 @@
         <div class="weather-feel">
             <div class="feeling">
                 <i id="symbol-weather" class=""></i>
-                <p id="sostoyanie-weather">Солнечно</p>
+                <p class="colorel" id="sostoyanie-weather">Солнечно</p>
             </div>
             <h1 style="transition: all 0.3s;" id="temp-weather">0°</h1>
         </div>
@@ -378,6 +378,10 @@
 
             });
         }
+
+        document.querySelectorAll(".colorel").forEach(el => {
+            el.style.color = localStorage.getItem("BrickTheme");
+        });
 
         whatisweather()
     </script>
