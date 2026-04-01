@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <style>
+        * {
+            color: white;
+            padding: 0; margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            -webkit-user-select: none;
+            user-select: none;
+            outline: none;
+            box-sizing: border-box;
+        }
+        *::-webkit-scrollbar { display: none; }
+
+        body {
+            background: black;
+            width: 100%;
+            height: calc(100vh - 40px);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .header {
+            width: 100%;
+            height: 10vh;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 0 10px;
+            overflow-x: auto;
+            flex-shrink: 0;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-x;
+        }
+        .header button {
+            height: 100%;
+            font-size: 7vh;
+            font-weight: 400;
+            background: none;
+            border: none;
+            color: #807F84;
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+        .header button.active { color: white; }
+
+        .mainsrc {
+            flex: 1;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .mainsrc.active { display: flex; }
+
+        #screen-dialer {
+            padding: 10px 15px 15px;
+            justify-content: space-between;
+        }
+
+        .number-display {
+            font-size: 42px;
+            font-weight: 300;
+            letter-spacing: 4px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 0 5px;
+            flex-shrink: 0;
+
+            overflow-x: auto;        
+            scrollbar-width: none;    
+        }
+        .number-display::-webkit-scrollbar {
+            display: none;           
+        }
+
+        .number-display span {
+            display: inline-block;
+            min-width: 0;       
+            white-space: nowrap;  
+            text-align: left;    
+            flex-shrink: 0;      
+        }
+        .number-display button {
+            background: none;
+            border: none;
+            color: #555;
+            font-size: 28px;
+            cursor: pointer;
+            padding: 0 0 0 10px;
+            flex-shrink: 0;
+        }
+        .number-display button:active { color: white; }
+
+        .keypad {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: 2px;
+        }
+
+        .key {
+            background: none;
+            border: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            transition: background 0.1s;
+            border-radius: 2px;
+        }
+
+        .key .digit {
+            font-size: 25px;
+            font-weight: 300;
+            line-height: 1;
+        }
+
+        .notification {
+            position: absolute;
+            top: -200px;
+            left: 0;
+            width: 100%;
+            background: #1F1F1F;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: flex-start;
+            transition: top 0.4s cubic-bezier(.4,0,.2,1);
+            z-index: 200;
+        }
+        .notification p { font-size: 20px; }
+        .notification span { font-size: 14px; color: #aaa; }
+        .notification button {
+            margin-top: 4px;
+            background: none;
+            border: 1.5px solid white;
+            color: white;
+            font-size: 14px;
+            padding: 5px 14px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <button id="butt1" class="active">Нампад</button>
+    </div>
+
+    <div id="screen-dialer" class="mainsrc active">
+        <div class="number-display">
+            <span id="numberDisplay"></span>
+        </div>
+
+        <div class="keypad">
+            <button class="key" onclick="pressKey('один')"><span class="digit">один</span></button>
+            <button class="key" onclick="pressKey('екі')"><span class="digit">екі</span></button>
+            <button class="key" onclick="pressKey('three')"><span class="digit">three</span></button>
+            <button class="key" onclick="pressKey('四')"><span class="digit">四</span></button>
+            <button class="key" onclick="pressKey('пяць')"><span class="digit">пяць</span></button>
+            <button class="key" onclick="pressKey('seis')"><span class="digit">seis</span></button>
+            <button class="key" onclick="pressKey('tujuh')"><span class="digit">tujuh</span></button>
+            <button class="key" onclick="pressKey('acht')"><span class="digit">acht</span></button>
+            <button class="key" onclick="pressKey('九')"><span class="digit">九</span></button>
+            <button class="key" onclick="pressKey('noll')"><span class="digit">noll</span></button>
+            <button class="key" onclick="pressKey('e')"><span class="digit">e</span></button>
+            <button class="key colorell" onclick="pressKey('-')"><span class="digit">-</span></button>
+            <button class="key colorell" onclick="pressKey('+')"><span class="digit">+</span></button>
+            <button class="key colorell" onclick="pressKey('*')"><span class="digit">*</span></button>
+            <button class="key colorell" onclick="pressKey('/')"><span class="digit">/</span></button>
+            <button class="key colorell" onclick="pressR()"><span class="digit">=</span></button>
+        </div>
+    </div>
+
+    <div id="notblock" class="notification">
+        <p id="notificationText">Текст</p>
+        <span id="notificationAbout"></span>
+        <button onclick="hideNotification()">С кайфом</button>
+    </div>
+
+
+    <script>
+        let number = '';
+        const audio = document.getElementById('audioEl');
+
+        const display = document.getElementById('numberDisplay');
+
+        function pressKey(k) {
+            number += k;
+            display.textContent = number;
+            display.parentElement.scrollLeft = display.scrollWidth;
+        }
+
+        function pressR() {
+            display.textContent = "брат, это уже пизда";
+            number = "";
+        }
+
+        function showNotification(text, about) {
+            document.getElementById('notificationText').textContent = text;
+            document.getElementById('notificationAbout').textContent = about || '';
+            document.getElementById('notblock').style.top = '0px';
+        }
+
+        function hideNotification() {
+            document.getElementById('notblock').style.top = '-200px';
+        }
+
+        document.querySelectorAll(".colorel").forEach(el => {
+            el.style.color = localStorage.getItem("BrickTheme");
+        });
+        document.querySelectorAll(".colorell").forEach(el => {
+            el.style.background = localStorage.getItem("BrickTheme");
+        });
+    </script>
+</body>
+</html>
